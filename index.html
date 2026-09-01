@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>HI MATRIX</title>
+    <!-- استدعاء قاعدة البيانات Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,29 +78,41 @@
         <h1>HI MATRIX</h1>
         
         <div class="info-box">
-            <h3>معلوماتي الشخصية وملاحظاتي:</h3>
-            <p>هنا تقدر تكتب وتعدل أي حاجة بغيتي، وغير تكليكي على حفظ غتبقى مبدلة عندك في الموقع ديما:</p>
+            <h3>معلوماتي الشخصية وملاحظاتي المشتراكة:</h3>
+            <p>أي حاجة كتبتها هنا غاتتحفظ في السيرفر وغاتبقا تبان ليك في التليفون وفي البيسي في دبلة وحدة:</p>
             
-            <textarea id="userText" placeholder="اكتب معلوماتك هنا..."></textarea>
+            <textarea id="userText" placeholder="جارٍ تحميل المعلومات..."></textarea>
             <br>
             <button onclick="saveData()">حفظ المعلومات</button>
         </div>
     </div>
 
     <script>
-        // تحميل المعلومات القديمة إيلا كانت محفوظة
-        window.onload = function() {
-            let savedText = localStorage.getItem('matrixInfo');
-            if (savedText) {
-                document.getElementById('userText').value = savedText;
-            }
+        // إعدادات الاتصال بالسيرفر
+        const firebaseConfig = {
+            databaseURL: "https://matrix-notes-default-rtdb.firebaseio.com/"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        // حفظ المعلومات الجديدة
+        const textRef = db.ref('matrixNotes');
+
+        // جلب البيانات ومزامنتها مباشرة من السيرفر
+        textRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data !== null) {
+                document.getElementById('userText').value = data;
+            }
+        });
+
+        // حفظ البيانات في السيرفر لتظهر في جميع الأجهزة
         function saveData() {
             let text = document.getElementById('userText').value;
-            localStorage.setItem('matrixInfo', text);
-            alert("تم حفظ المعلومات بنجاح في موقعك!");
+            textRef.set(text).then(() => {
+                alert("تم حفظ المعلومات في السيرفر وتحديثها في كل الأجهزة بنجاح!");
+            }).catch((error) => {
+                alert("حدث خطأ أثناء الحفظ!");
+            });
         }
     </script>
 
