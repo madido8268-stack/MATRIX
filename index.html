@@ -3,10 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>HI MATRIX</title>
-    <!-- استدعاء قاعدة البيانات Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,31 +30,7 @@
             padding: 20px;
             border-radius: 5px;
             margin-top: 20px;
-        }
-        textarea {
-            width: 100%;
-            height: 120px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            resize: vertical;
-            box-sizing: border-box;
-            margin-top: 10px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #0056b3;
+            line-height: 1.8;
         }
     </style>
 </head>
@@ -78,43 +50,12 @@
         <h1>HI MATRIX</h1>
         
         <div class="info-box">
-            <h3>معلوماتي الشخصية وملاحظاتي المشتراكة:</h3>
-            <p>أي حاجة كتبتها هنا غاتتحفظ في السيرفر وغاتبقا تبان ليك في التليفون وفي البيسي في دبلة وحدة:</p>
-            
-            <textarea id="userText" placeholder="جارٍ تحميل المعلومات..."></textarea>
-            <br>
-            <button onclick="saveData()">حفظ المعلومات</button>
+            <h3>مرحباً بك أ سي محمد، ها هي معلوماتك الخاصة:</h3>
+            <p><strong>العالم الرقمي:</strong> جاهز ومستقر 100%.</p>
+            <p><strong>الألعاب والمشاريع:</strong> مريكلين في أمان الله بلا مشاكل وبدون سيرفرات زايدة.</p>
+            <p><strong>ملاحظة:</strong> هذا الموقع الآن يظهر بنفس الشكل والثبات في أي جهاز فتحتيه منه (بيسي أو تليفون).</p>
         </div>
     </div>
-
-    <script>
-        // إعدادات الاتصال بالسيرفر
-        const firebaseConfig = {
-            databaseURL: "https://matrix-notes-default-rtdb.firebaseio.com/"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        const textRef = db.ref('matrixNotes');
-
-        // جلب البيانات ومزامنتها مباشرة من السيرفر
-        textRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data !== null) {
-                document.getElementById('userText').value = data;
-            }
-        });
-
-        // حفظ البيانات في السيرفر لتظهر في جميع الأجهزة
-        function saveData() {
-            let text = document.getElementById('userText').value;
-            textRef.set(text).then(() => {
-                alert("تم حفظ المعلومات في السيرفر وتحديثها في كل الأجهزة بنجاح!");
-            }).catch((error) => {
-                alert("حدث خطأ أثناء الحفظ!");
-            });
-        }
-    </script>
 
 </body>
 </html>
